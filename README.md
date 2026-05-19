@@ -13,4 +13,4 @@ Obraz po zaszyfrowaniu wiadomości:
 PSNR między tymi obrazami wynosi: 70.38911.
 
 ## Maksymalna pojemność
-$$\begin{{pojemność}\eq\frac{{szerokość}\times{wysokość}\times{liczba kanałów}{liczba bitów na znak}}}$$
+$$ \text{Pojemność} = \frac{\text{Szerokość} \times \text{Wysokość} \times \text{Liczba kanałów}}{\text{Liczba bitów na znak}} $$
