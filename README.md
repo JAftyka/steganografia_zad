@@ -7,4 +7,4 @@ Oryginalny obraz:
 ![steganografia_zad/cover.png](https://github.com/JAftyka/steganografia_zad/blob/main/cover.png?raw=true)
 
 Obraz po zaszyfrowaniu wiadomości:
-![steganografia_zad/stego.png](https://github.com/JAftyka/steganografia_zad/blob/main/cover.png?raw=true)
+![steganografia_zad/stego.png](https://github.com/JAftyka/steganografia_zad/blob/main/stego.png?raw=true)
