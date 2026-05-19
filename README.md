@@ -4,7 +4,7 @@
 
 ## Przykład działania:
 Oryginalny obraz:
-![obraz cover.png](steganografia_zad/cover.png)
+![steganografia_zad/cover.png](https://github.com/JAftyka/steganografia_zad/blob/main/cover.png?raw=true))
 
 Obraz po zaszyfrowaniu wiadomości:
-![obraz stego.png](steganografia_zad/stego.png)
+![steganografia_zad/stego.png](https://github.com/JAftyka/steganografia_zad/blob/main/cover.png?raw=true))
