@@ -1,74 +1,73 @@
 import cv2
 import numpy as np
 
-def loadImage(filename):
-    return cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+def show(image_path):
+  img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+  if img is None:
+    print(f"Error: Nie udało się odczytać obrazu {image_path}")
+    return
+  cv2.imshow("Image", img)
+  cv2.waitKey(0)
+  cv2.destroyAllWindows()
+  
+def embed(image_path, message, output_path):
+  cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+  if cover is None:
+    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
+  message_bits = ''.join(format(ord(char), '08b') for char in message)
+  num_bits = len(message_bits)
+    
+  flat_cover = cover.flatten()
 
-def showImage(img):
-    if img is not None:
-        cv2.imshow('Display Window', img)
-        cv2.waitKey(0) # Waits until any key is pressed
-        cv2.destroyAllWindows()
-    else:
-        print("Error: Could not load the image. Check the file path!")
+  if num_bits > len(flat_cover):
+    raise ValueError("Wiadomość jest za długa!")
+    
+  for i in range(len(message_bits)):
+    bit = int(message_bits[i])
+    # wyzerowanie LSB i ustawienie nowego bitu
+    flat_cover[i] = (flat_cover[i] & 254) | bit
+    
+  stego_image = flat_cover.reshape(cover.shape)
+  cv2.imwrite(output_path, stego_image)
+  print(f"Ukryto wiadomość w {output_path}")
+  
+def extract(stego_path, message_length):
+  stego = cv2.imread(stego_path, cv2.IMREAD_UNCHANGED)
+  
+  if stego is None:
+    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
+  
+  flat_stego = stego.flatten()
+  
+  message = ""
+    
+  for i in range(message_length):
+    byte_value = 0
+    for j in range(8):          
+        bit = flat_stego[i * 8 + j] & 1            
+        byte_value |= (bit << (7 - j))
+    message += chr(byte_value)
+    
+  return message
 
-def text_to_bits(text):
-    text += '\0'
-    bits = ""
-    for char in text:
-        bits += f"{ord(char):08b}"
-    return bits
+def calculate_psnr(img1_path, img2_path, max_value=255):
+    """"Calculating peak signal-to-noise ratio (PSNR) between two images."""
+    img1 = cv2.imread(img1_path, cv2.IMREAD_UNCHANGED)
+    img2 = cv2.imread(img2_path, cv2.IMREAD_UNCHANGED)
+    mse = np.mean((np.array(img1, dtype=np.float32) - np.array(img2, dtype=np.float32)) ** 2)
+    if mse == 0:
+        return 100
+    return 20 * np.log10(max_value / (np.sqrt(mse)))
 
-def bits_to_text(bits):
-    chars = []
-    for i in range(0, len(bits), 8):
-        byte = bits[i:i+8]
-        if len(byte) < 8:
-            break
-        char_code = int(byte, 2)
-        if char_code == 0: # napotkano znacznik końca wiadomości
-            break
-        chars.append(chr(char_code))
-    return "".join(chars)
 
-def getFilename():
-    filename = input("Podaj nazwę pliku png: ").strip()
-    filename = filename if filename[-4:] == ".png" else filename + ".png"
-    return filename
-
-def lsb_embed(cover, bits):
-    original_shape = cover.shape
-
-    flat_cover = cover.flatten()
-
-    if len(bits) > len(flat_cover):
-        print("Błąd: Wiadomość jest za długa, aby zmieścić się w tym obrazie!")
-        return cover
-
-    for i in range(len(bits)):
-        bit = int(bits[i])
-        flat_cover[i] = (flat_cover[i] & 254) | bit
-
-    return flat_cover.reshape(original_shape)
-
-def UI():
-    if input("Wybierz czynność:\n1. Ukryj wiadomość w pliku png\n2. Wyodrębnij wiadomość z pliku png\n").strip()=="1":
-        filename = getFilename()
-        img = loadImage(filename)
-
-        if img is None:
-            print("Nie można wczytać pliku źródłowego.")
-            return
-
-        message = input("Podaj wiadomość do ukrycia: ").strip()
-
-        bit_message = text_to_bits(message)
-
-        stego_img = lsb_embed(img, bit_message)
-
-        output_filename = "stego_" + filename
-        cv2.imwrite(output_filename, stego_img)
-        print(f"Wiadomość została ukryta! Nowy plik to: {output_filename}")
-        showImage(loadImage(output_filename))
-
-UI()
+if __name__ == "__main__":
+    
+    message = input("Podaj wiadomość do zaszyfrowania: ").strip()
+    
+    message_len = len(message)
+    
+    embed("cover.png", message, "stego.png")
+    
+    decrypted = extract("stego.png", message_len)
+    print("Odszyfrowana wiadomość:", decrypted)
+    print("PSNR pomiędzy obrazami:",calculate_psnr("cover.png", "stego.png", max_value=255))
