@@ -35,7 +35,7 @@ def extract(stego_path, message_length):
   stego = cv2.imread(stego_path, cv2.IMREAD_UNCHANGED)
   
   if stego is None:
-    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
+    raise FileNotFoundError(f"Nie znaleziono obrazu {stego_path}")
   
   flat_stego = stego.flatten()
   
