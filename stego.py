@@ -1,14 +1,5 @@
 import cv2
 import numpy as np
-
-def show(image_path):
-  img = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-  if img is None:
-    print(f"Error: Nie udało się odczytać obrazu {image_path}")
-    return
-  cv2.imshow("Image", img)
-  cv2.waitKey(0)
-  cv2.destroyAllWindows()
   
 def embed(image_path, message, output_path):
   cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
