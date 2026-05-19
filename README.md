@@ -1,6 +1,6 @@
 # steganografia_zad
 
-## Program korzysta z biblioteki OpenCV do obsługi plików w formacie PNG oraz z biblioteki NumPy do obliczania PSNR. 
+Program korzysta z biblioteki OpenCV do obsługi plików w formacie PNG oraz z biblioteki NumPy do obliczania PSNR. 
 
 ## Przykład działania programu
 
