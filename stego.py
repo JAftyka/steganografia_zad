@@ -1,5 +1,13 @@
 import cv2
 import numpy as np
+
+def calc_max_message_length(image_path):
+  cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+  if cover is None:
+    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
+  height, width = cover.shape[:2]
+  channels = len(cv2.split(cover))
+  return (height * width * channels)//8
   
 def embed(image_path, message, output_path):
   cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
@@ -16,7 +24,7 @@ def embed(image_path, message, output_path):
   for i in range(len(message_bits)):
     bit = int(message_bits[i])
     # wyzerowanie LSB i ustawienie nowego bitu
-    flat_cover[i] = (flat_cover[i] & 254) | bit
+    flat_cover[i] = (flat_cover[i] & 254) | bit # 254 = 11111110
     
   stego_image = flat_cover.reshape(cover.shape)
   cv2.imwrite(output_path, stego_image)
@@ -42,7 +50,6 @@ def extract(stego_path, message_length):
   return message
 
 def calculate_psnr(img1_path, img2_path, max_value=255):
-    """"Calculating peak signal-to-noise ratio (PSNR) between two images."""
     img1 = cv2.imread(img1_path, cv2.IMREAD_UNCHANGED)
     img2 = cv2.imread(img2_path, cv2.IMREAD_UNCHANGED)
     mse = np.mean((np.array(img1, dtype=np.float32) - np.array(img2, dtype=np.float32)) ** 2)
@@ -52,8 +59,9 @@ def calculate_psnr(img1_path, img2_path, max_value=255):
 
 
 if __name__ == "__main__":
-    
-    message = input("Podaj wiadomość do zaszyfrowania: ").strip()
+    #with open("example_message.txt") as f:
+    #  message = f.read()
+    message = input("Podaj wiadomość do zaszyfrowania (maksymalna długość: " + str(calc_max_message_length("cover.png")) + "): ").strip()
     
     message_len = len(message)
     
@@ -62,3 +70,4 @@ if __name__ == "__main__":
     decrypted = extract("stego.png", message_len)
     print("Odszyfrowana wiadomość:", decrypted)
     print("PSNR pomiędzy obrazami:",calculate_psnr("cover.png", "stego.png", max_value=255))
+  
