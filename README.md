@@ -20,4 +20,4 @@ Wzór na maksymalną liczbę znaków ASCII wiadomości:
 
 $$ \text{Pojemność} = \frac{\text{Szerokość} \times \text{Wysokość} \times \text{Liczba kanałów}}{\text{Liczba bitów na znak}} $$
 
-W przypadku przykładowego pliku cover.png, maksymalna długość wiadomości wynosi $ \frac{1200 \cdot 901 \cdot 3}{8} = 405450 $
+W przypadku przykładowego pliku cover.png, maksymalna długość wiadomości wynosi $$\frac{1200 \cdot 901 \cdot 3}{8} = 405450$$
