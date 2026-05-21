@@ -22,4 +22,4 @@ $$ \text{Pojemność} = \frac{\text{Szerokość} \times \text{Wysokość} \times
 
 W przypadku przykładowego pliku cover.png, maksymalna długość wiadomości wynosi więc:
 
-$$\frac{1200 \times 901 \times 3}{8} = 405450$$
+$$\frac{{1200} \times {901} \times {3}}{{8}} = {405450}$$
