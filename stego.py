@@ -37,7 +37,7 @@ def embed(image_path, message, output_path):
     stego_image.putdata(new_pixels)
     stego_image.save(output_path)
   
-    print(f"Ukryto wiadomość w {output_path}")
+    print("\nUkryto wiadomość w", output_path)
   
   
 def extract(stego_path, message_length):
@@ -121,8 +121,8 @@ if __name__ == "__main__":
     embed("cover.png", message, "stego.png")
     
     decrypted = extract("stego.png", message_len)
-    print("Odszyfrowana wiadomość:", decrypted)
-    print("PSNR pomiędzy obrazami:",calculate_psnr("cover.png", "stego.png", max_value=255))
+    print("\nOdszyfrowana wiadomość:", decrypted)
+    print("\nPSNR pomiędzy obrazami:",calculate_psnr("cover.png", "stego.png", max_value=255))
     
     test_jpeg_compression_impact("stego.png", message)
     
