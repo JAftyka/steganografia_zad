@@ -82,7 +82,7 @@ def test_jpeg_compression_impact(stego_path, original_message):
     
     qualities = [95, 90, 75, 50, 25]
     
-    print("\n=== WPŁYW KOMPRESJI JPEG NA BITÓW WIADOMOŚCI ===")
+    print("\n=== WPŁYW KOMPRESJI JPEG NA POPRAWNOŚĆ WIADOMOŚCI ===")
     print(f"Długość testowanej wiadomości: {len(original_message)} znaków ({num_bits} bitów)\n")
     print(f"{'Jakość JPEG':<14} | {'Poprawnie odczytane bity':<25}")
     print("-" * 45)
