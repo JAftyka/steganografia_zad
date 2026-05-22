@@ -12,7 +12,7 @@ Wiadomość: zawartość pliku example_message.txt
 Obraz po zaszyfrowaniu wiadomości:
 ![steganografia_zad/stego.png](https://github.com/JAftyka/steganografia_zad/blob/main/stego.png?raw=true)
 
-PSNR między tymi obrazami wynosi: 61.317802.
+PSNR między tymi obrazami wynosi: 61.31729791520171.
 
 ## Maksymalna pojemność
 
