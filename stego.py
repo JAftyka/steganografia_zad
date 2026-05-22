@@ -1,22 +1,21 @@
-import cv2
-import numpy as np
+import math
+from PIL import Image
 
 def calc_max_message_length(image_path):
-  cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-  if cover is None:
-    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
-  height, width = cover.shape[:2]
-  channels = len(cv2.split(cover))
+  cover = Image.open(image_path)
+  height, width = cover.size[1], cover.size[0]
+  channels = len(cover.getbands())
   return (height * width * channels)//8
   
 def embed(image_path, message, output_path):
-  cover = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-  if cover is None:
-    raise FileNotFoundError(f"Nie znaleziono obrazu {image_path}")
+  cover = Image.open(image_path)
+  if cover.mode not in ('RGB', 'RGBA'):
+    cover = cover.convert('RGB')
+    
   message_bits = ''.join(format(ord(char), '08b') for char in message)
   num_bits = len(message_bits)
     
-  flat_cover = cover.flatten()
+  flat_cover = [channel for pixel in cover.get_flattened_data() for channel in pixel]
 
   if num_bits > len(flat_cover):
     raise ValueError("Wiadomość jest za długa!")
@@ -26,17 +25,20 @@ def embed(image_path, message, output_path):
     # wyzerowanie LSB i ustawienie nowego bitu
     flat_cover[i] = (flat_cover[i] & 254) | bit # 254 = 11111110
     
-  stego_image = flat_cover.reshape(cover.shape)
-  cv2.imwrite(output_path, stego_image)
+  channels = len(cover.getbands())
+  new_pixels = []
+  for i in range(0, len(flat_cover), channels):
+    new_pixels.append(tuple(flat_cover[i:i+channels]))
+    
+  stego_image = Image.new(cover.mode, cover.size)
+  stego_image.putdata(new_pixels)
+  stego_image.save(output_path)
   print(f"Ukryto wiadomość w {output_path}")
   
 def extract(stego_path, message_length):
-  stego = cv2.imread(stego_path, cv2.IMREAD_UNCHANGED)
+  stego = Image.open(stego_path)
   
-  if stego is None:
-    raise FileNotFoundError(f"Nie znaleziono obrazu {stego_path}")
-  
-  flat_stego = stego.flatten()
+  flat_stego = [channel for pixel in stego.get_flattened_data() for channel in pixel]
   
   message = ""
     
@@ -50,12 +52,20 @@ def extract(stego_path, message_length):
   return message
 
 def calculate_psnr(img1_path, img2_path, max_value=255):
-    img1 = cv2.imread(img1_path, cv2.IMREAD_UNCHANGED)
-    img2 = cv2.imread(img2_path, cv2.IMREAD_UNCHANGED)
-    mse = np.mean((np.array(img1, dtype=np.float32) - np.array(img2, dtype=np.float32)) ** 2)
+    img1 = Image.open(img1_path)
+    img2 = Image.open(img2_path)
+    if img1.mode not in ('RGB', 'RGBA'): img1 = img1.convert('RGB')
+    if img2.mode not in ('RGB', 'RGBA'): img2 = img2.convert('RGB')
+    
+    flat_1 = [channel for pixel in img1.get_flattened_data() for channel in pixel]
+    flat_2 = [channel for pixel in img2.get_flattened_data() for channel in pixel]
+    
+    squared_errors = [(a - b) ** 2 for a, b in zip(flat_1, flat_2)]
+    mse = sum(squared_errors) / len(squared_errors)
+    
     if mse == 0:
         return 100
-    return 20 * np.log10(max_value / (np.sqrt(mse)))
+    return 20 * math.log10(max_value / (math.sqrt(mse)))
 
 
 if __name__ == "__main__":
@@ -70,4 +80,3 @@ if __name__ == "__main__":
     decrypted = extract("stego.png", message_len)
     print("Odszyfrowana wiadomość:", decrypted)
     print("PSNR pomiędzy obrazami:",calculate_psnr("cover.png", "stego.png", max_value=255))
-  
