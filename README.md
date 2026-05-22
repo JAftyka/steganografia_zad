@@ -15,6 +15,8 @@ Obraz po zaszyfrowaniu wiadomości:
 
 PSNR między tymi obrazami wynosi: 61.31729791520171.
 
+---
+
 ## Maksymalna pojemność
 
 Wzór na maksymalną liczbę znaków ASCII wiadomości:
