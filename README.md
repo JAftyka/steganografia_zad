@@ -19,12 +19,18 @@ PSNR między tymi obrazami wynosi: 61.31729791520171.
 
 Wzór na maksymalną liczbę znaków ASCII wiadomości:
 
+<div align="center">
 $$ \text{Pojemność} = \frac{\text{Szerokość} \times \text{Wysokość} \times \text{Liczba kanałów}}{\text{Liczba bitów na znak}} $$
+</div>
 
 W przypadku przykładowego pliku cover.png, maksymalna długość wiadomości wynosi więc: 
 
+<div align="center">
 $$\frac{{1200} \times {901} \times {3}}{{8}} = {405450}$$.
+</div>
 
 Dla obrazu RGB 256×256 będzie to z kolei: 
 
+<div align="center">
 $$\frac{{256} \times {256} \times {3}}{{8}} = {24576}$$.
+</div>
