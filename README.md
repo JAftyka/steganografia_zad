@@ -23,8 +23,8 @@ $$ \text{Pojemność} = \frac{\text{Szerokość} \times \text{Wysokość} \times
 
 W przypadku przykładowego pliku cover.png, maksymalna długość wiadomości wynosi więc: 
 
-$$ \frac{{1200} \times {901} \times {3}}{{8}} = {405450} $$.
+$$\frac{{1200} \times {901} \times {3}}{{8}} = {405450}$$.
 
 Dla obrazu RGB 256×256 będzie to z kolei: 
 
-$$ \frac{{256} \times {256} \times {3}}{{8}} = {24576} $$.
+$$\frac{{256} \times {256} \times {3}}{{8}} = {24576}$$.
