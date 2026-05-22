@@ -1,6 +1,7 @@
 # steganografia_zad
 
-Program korzysta z biblioteki OpenCV do obsługi plików w formacie PNG oraz z biblioteki NumPy do obliczania PSNR. 
+Program służy do ukrywania i odczytywania wiadomości tekstowych w obrazach (steganografia LSB). 
+Projekt został napisany w Pythonie z wykorzystaniem biblioteki Pillow do obsługi plików PNG oraz modułu math do obliczania wskaźnika PSNR.
 
 ## Przykład działania programu
 
